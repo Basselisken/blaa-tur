@@ -220,7 +220,7 @@ export default function CrypticPage() {
         {/* Code input interface */}
         <div className="bg-black border-2 border-green-500 rounded-lg p-8 mb-8 shadow-[0_0_20px_rgba(0,255,0,0.3)]">
           <div className="text-green-400 mb-6 text-lg">
-            // INDTAST KODER
+            {`// INDTAST KODER`}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">

@@ -115,7 +115,7 @@ function HiddenPage3Content() {
 
         <div className="bg-black border-2 border-green-500 rounded-lg p-8 shadow-[0_0_20px_rgba(0,255,0,0.3)]">
           <div className="text-green-400 mb-6 text-lg">
-            // VELKOMMEN TIL DENNE SIDE
+            {`// VELKOMMEN TIL DENNE SIDE`}
           </div>
           <div className="text-green-300 space-y-4 mb-8">
             <p>Dette er den tredje hemmelige side.</p>
@@ -166,7 +166,7 @@ function HiddenPage3Content() {
                 </div>
                 <div className="text-green-300 space-y-3 border-t border-green-800 pt-4">
                   <p className="text-xl font-semibold text-green-400">
-                    // KLASSIFICERET INFORMATION
+                    {`// KLASSIFICERET INFORMATION`}
                   </p>
                   <p>
                     Dette er hemmelig information der kun er tilgængelig efter timelåsen er udløbet.
