@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Cryptic page animations */
+@keyframes glitch {
+  0%, 100% {
+    text-shadow: 2px 0 #00ff00, -2px 0 #ff0000;
+  }
+  25% {
+    text-shadow: -2px 0 #00ff00, 2px 0 #ff0000;
+  }
+  50% {
+    text-shadow: 2px 0 #ff0000, -2px 0 #00ff00;
+  }
+  75% {
+    text-shadow: -2px 0 #ff0000, 2px 0 #00ff00;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.cryptic-scanline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(0, 255, 0, 0.5);
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+  z-index: 1000;
+}
+
