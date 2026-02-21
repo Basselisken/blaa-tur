@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 // September 3rd - use next occurrence if we've passed it this year
 function getTargetDate() {
@@ -39,8 +40,10 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState(getTimeLeft());
   const [isMounted, setIsMounted] = useState(false);
   const [terminalInput, setTerminalInput] = useState("");
-  const [terminalHistory, setTerminalHistory] = useState<string[]>([]);
+  const [terminalHistory, setTerminalHistory] = useState<{ text: string; type?: "system" }[]>([]);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const terminalEndRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
@@ -52,9 +55,29 @@ export default function Home() {
     terminalEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [terminalHistory]);
 
+  const startRedirectCountdown = () => {
+    setIsRedirecting(true);
+    setTerminalHistory((prev) => [...prev, { text: "✓ KODE VERIFICERET — OMDIRIGERER OM 3...", type: "system" }]);
+
+    setTimeout(() => {
+      setTerminalHistory((prev) => [...prev, { text: "2...", type: "system" }]);
+    }, 1000);
+
+    setTimeout(() => {
+      setTerminalHistory((prev) => [...prev, { text: "1...", type: "system" }]);
+    }, 2000);
+
+    setTimeout(() => {
+      router.push("/cryptic");
+    }, 3000);
+  };
+
   const handleTerminalKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && terminalInput.trim()) {
-      setTerminalHistory((prev) => [...prev, terminalInput]);
+    if (e.key === "Enter" && terminalInput.trim() && !isRedirecting) {
+      setTerminalHistory((prev) => [...prev, { text: terminalInput }]);
+      if (terminalInput.trim().toLowerCase() === "tallinn") {
+        startRedirectCountdown();
+      }
       setTerminalInput("");
     }
   };
@@ -180,24 +203,26 @@ export default function Home() {
           </div>
           <div className="p-4 max-h-60 overflow-y-auto text-left">
             {terminalHistory.map((line, i) => (
-              <div key={i} className="flex gap-2 mb-1">
-                <span className="text-green-600 shrink-0">$</span>
-                <span className="text-green-400">{line}</span>
+              <div key={i} className={`flex gap-2 mb-1 ${line.type === "system" ? "text-green-300 animate-pulse" : ""}`}>
+                {line.type !== "system" && <span className="text-green-600 shrink-0">$</span>}
+                <span className={line.type === "system" ? "text-green-300" : "text-green-400"}>{line.text}</span>
               </div>
             ))}
-            <div className="flex items-center gap-2">
-              <span className="text-green-400 shrink-0">$</span>
-              <input
-                type="text"
-                value={terminalInput}
-                onChange={(e) => setTerminalInput(e.target.value)}
-                onKeyDown={handleTerminalKeyDown}
-                className="flex-1 bg-transparent border-none text-green-400 font-mono focus:outline-none focus:ring-0"
-                spellCheck={false}
-                autoComplete="off"
-              />
-              <span className="text-green-400 animate-pulse">_</span>
-            </div>
+            {!isRedirecting && (
+              <div className="flex items-center gap-2">
+                <span className="text-green-400 shrink-0">$</span>
+                <input
+                  type="text"
+                  value={terminalInput}
+                  onChange={(e) => setTerminalInput(e.target.value)}
+                  onKeyDown={handleTerminalKeyDown}
+                  className="flex-1 bg-transparent border-none text-green-400 font-mono focus:outline-none focus:ring-0"
+                  spellCheck={false}
+                  autoComplete="off"
+                />
+                <span className="text-green-400 animate-pulse">_</span>
+              </div>
+            )}
             <div ref={terminalEndRef} />
           </div>
         </div>
