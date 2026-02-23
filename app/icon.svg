@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#000000"/>
+  <!-- Hat brim -->
+  <ellipse cx="32" cy="22" rx="22" ry="5" fill="#00cc44"/>
+  <!-- Hat top -->
+  <path d="M18 22 Q18 10 32 8 Q46 10 46 22" fill="#00cc44"/>
+  <!-- Face silhouette -->
+  <ellipse cx="32" cy="34" rx="12" ry="11" fill="#000000"/>
+  <!-- Left eye (lens) -->
+  <circle cx="26" cy="32" r="5.5" fill="none" stroke="#00ff55" stroke-width="2"/>
+  <circle cx="26" cy="32" r="2" fill="#00ff55"/>
+  <!-- Right eye (lens) -->
+  <circle cx="38" cy="32" r="5.5" fill="none" stroke="#00ff55" stroke-width="2"/>
+  <circle cx="38" cy="32" r="2" fill="#00ff55"/>
+  <!-- Glasses bridge -->
+  <line x1="31.5" y1="32" x2="32.5" y2="32" stroke="#00ff55" stroke-width="2"/>
+  <!-- Collar / coat -->
+  <path d="M20 44 L26 40 L32 46 L38 40 L44 44 L46 56 L18 56 Z" fill="#00cc44"/>
+  <!-- Tie -->
+  <path d="M30 46 L32 54 L34 46 L32 48 Z" fill="#000000"/>
+</svg>

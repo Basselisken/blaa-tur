@@ -199,32 +199,40 @@ export default function Home() {
             <div className="w-3 h-3 rounded-full bg-green-600"></div>
             <div className="w-3 h-3 rounded-full bg-green-800"></div>
             <div className="w-3 h-3 rounded-full bg-green-800"></div>
-            <span className="ml-4 text-green-600 text-xs">TERMINAL — KLAR</span>
+            <span className="ml-4 text-green-600 text-xs">
+              {isMounted && timeLeft.isComplete ? "TERMINAL — KLAR" : "TERMINAL — DEAKTIVERET"}
+            </span>
           </div>
-          <div className="p-4 max-h-60 overflow-y-auto text-left">
-            {terminalHistory.map((line, i) => (
-              <div key={i} className={`flex gap-2 mb-1 ${line.type === "system" ? "text-green-300 animate-pulse" : ""}`}>
-                {line.type !== "system" && <span className="text-green-600 shrink-0">$</span>}
-                <span className={line.type === "system" ? "text-green-300" : "text-green-400"}>{line.text}</span>
-              </div>
-            ))}
-            {!isRedirecting && (
-              <div className="flex items-center gap-2">
-                <span className="text-green-400 shrink-0">$</span>
-                <input
-                  type="text"
-                  value={terminalInput}
-                  onChange={(e) => setTerminalInput(e.target.value)}
-                  onKeyDown={handleTerminalKeyDown}
-                  className="flex-1 bg-transparent border-none text-green-400 font-mono focus:outline-none focus:ring-0"
-                  spellCheck={false}
-                  autoComplete="off"
-                />
-                <span className="text-green-400 animate-pulse">_</span>
-              </div>
-            )}
-            <div ref={terminalEndRef} />
-          </div>
+          {isMounted && timeLeft.isComplete ? (
+            <div className="p-4 max-h-60 overflow-y-auto text-left">
+              {terminalHistory.map((line, i) => (
+                <div key={i} className={`flex gap-2 mb-1 ${line.type === "system" ? "text-green-300 animate-pulse" : ""}`}>
+                  {line.type !== "system" && <span className="text-green-600 shrink-0">$</span>}
+                  <span className={line.type === "system" ? "text-green-300" : "text-green-400"}>{line.text}</span>
+                </div>
+              ))}
+              {!isRedirecting && (
+                <div className="flex items-center gap-2">
+                  <span className="text-green-400 shrink-0">$</span>
+                  <input
+                    type="text"
+                    value={terminalInput}
+                    onChange={(e) => setTerminalInput(e.target.value)}
+                    onKeyDown={handleTerminalKeyDown}
+                    className="flex-1 bg-transparent border-none text-green-400 font-mono focus:outline-none focus:ring-0"
+                    spellCheck={false}
+                    autoComplete="off"
+                  />
+                  <span className="text-green-400 animate-pulse">_</span>
+                </div>
+              )}
+              <div ref={terminalEndRef} />
+            </div>
+          ) : (
+            <div className="p-4 text-center text-green-700 text-sm">
+              [DEAKTIVERET INDTIL MISSIONEN STARTER]
+            </div>
+          )}
         </div>
       </div>
     </div>

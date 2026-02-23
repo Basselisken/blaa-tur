@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import TerminalChat from "../components/TerminalChat";
 
 function HiddenPage1Content() {
   const router = useRouter();
@@ -75,7 +76,7 @@ function HiddenPage1Content() {
           </div>
         </div>
 
-        <div className="bg-black border-2 border-green-500 rounded-lg p-8 shadow-[0_0_20px_rgba(0,255,0,0.3)]">
+        <div className="bg-black border-2 border-green-500 rounded-lg p-8 shadow-[0_0_20px_rgba(0,255,0,0.3)] mb-8">
           <div className="text-green-400 mb-6 text-lg">
             {`// VELKOMMEN TIL DENNE SIDE`}
           </div>
@@ -84,6 +85,8 @@ function HiddenPage1Content() {
             <p>Du har succesfuldt indtastet koden: K7X2-M9P4</p>
           </div>
         </div>
+
+        <TerminalChat chatId="team1" senderName="HOLD-1" />
       </div>
     </div>
   );
