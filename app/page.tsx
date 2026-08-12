@@ -109,6 +109,7 @@ export default function Home() {
           setTerminalHistory((prev) => [
             ...prev,
             { text: "// Forvent det uventede", type: "system" as const },
+            { text: "Dette er ikke koden til prepping listen", type: "error" as const },
           ]);
           setIsProcessing(false);
         }, 1000);
