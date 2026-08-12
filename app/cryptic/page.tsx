@@ -21,6 +21,8 @@ export default function CrypticPage() {
   const codeToUrlMap: { [key: string]: string } = {
     "K7X2-M9P4": "/x2k7m9p4",
     "B3N8-Q5W1": "/n8b3q5w1",
+    "R4T6-Y8Z9": "/r4t6-y8z9",
+    "P2L5-J8V3": "/p2l5j8v3",
   };
 
   useEffect(() => {

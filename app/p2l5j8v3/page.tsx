@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import MissionDay from "../components/MissionDay";
 import CompromisedBanner from "../components/CompromisedBanner";
 
-function HiddenPage1Content() {
+function Agent00PageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -14,26 +14,24 @@ function HiddenPage1Content() {
   useEffect(() => {
     const checkAuthorization = async () => {
       const token = searchParams.get("token");
-      
+
       if (!token) {
         router.push("/cryptic");
         return;
       }
 
       try {
-        // Verify the token matches the expected code
         const response = await fetch("/api/codes");
         const data = await response.json();
 
         if (response.ok) {
           const codes = data.codes;
-          // Check if token matches K7X2-M9P4
           const isValid = codes.some(
             (c: { code1: string; code2: string }) =>
-              c.code1 === "K7X2" && c.code2 === "M9P4"
+              c.code1 === "P2L5" && c.code2 === "J8V3"
           );
 
-          if (isValid && token === "k7x2-m9p4") {
+          if (isValid && token === "p2l5-j8v3") {
             setIsAuthorized(true);
           } else {
             router.push("/cryptic");
@@ -41,7 +39,7 @@ function HiddenPage1Content() {
         } else {
           router.push("/cryptic");
         }
-      } catch (error) {
+      } catch {
         router.push("/cryptic");
       } finally {
         setIsChecking(false);
@@ -71,10 +69,10 @@ function HiddenPage1Content() {
       <div className="relative z-10 container mx-auto px-4 py-16">
         <div className="mb-12">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 text-green-400">
-            &gt; KING CARROT
+            &gt; AGENT 00
           </h1>
           <div className="text-green-500 text-sm mb-2">
-            [KODE: K7X2-M9P4 VERIFICERET]
+            [KODE: P2L5-J8V3 VERIFICERET]
           </div>
         </div>
 
@@ -97,7 +95,7 @@ function HiddenPage1Content() {
   );
 }
 
-export default function HiddenPage1() {
+export default function Agent00SecretPage() {
   return (
     <Suspense
       fallback={
@@ -108,8 +106,7 @@ export default function HiddenPage1() {
         </div>
       }
     >
-      <HiddenPage1Content />
+      <Agent00PageContent />
     </Suspense>
   );
 }
-

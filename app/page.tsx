@@ -40,9 +40,11 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState(getTimeLeft());
   const [isMounted, setIsMounted] = useState(false);
   const [terminalInput, setTerminalInput] = useState("");
-  const [terminalHistory, setTerminalHistory] = useState<{ text: string; type?: "system" }[]>([]);
+  const [terminalHistory, setTerminalHistory] = useState<{ text: string; type?: "system" | "info" | "info-header" | "info-item" | "error" }[]>([]);
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const terminalEndRef = useRef<HTMLDivElement>(null);
+  const terminalInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -72,13 +74,64 @@ export default function Home() {
     }, 3000);
   };
 
+  const preppingList = [
+    { text: "Mødetidspunkt:", type: "info" as const },
+    { text: "Kl. 06:30 — Kastrup Lufthavn", type: "info-item" as const },
+    { text: "Bagage:", type: "info" as const },
+    { text: "1 personlig genstand (skal kunne ligge under sædet foran dig)", type: "info-item" as const },
+    { text: "1 stk. håndbagage (23 x 40 x 55 cm · maks. 10 kg)", type: "info-item" as const },
+    { text: "Ingen indtjekket bagage", type: "info-item" as const },
+    { text: "Pak til:", type: "info" as const },
+    { text: "Varierende vejr", type: "info-item" as const },
+    { text: "Intens aftenaktivitet", type: "info-item" as const },
+    { text: "Uforudsete hændelser", type: "info-item" as const },
+    { text: "Medbring:", type: "info" as const },
+    { text: "Gyldigt pas", type: "info-item" as const },
+    { text: "Missionsegnet påklædning", type: "info-item" as const },
+    { text: "Solbriller (også efter mørkets frembrud)", type: "info-item" as const },
+    { text: "Euro (hvis man har)", type: "info-item" as const },
+    { text: "Inden afgang:", type: "info" as const },
+    { text: "Video materiale af destrueret mission skal være indsendt til jeres handlers inden turen", type: "info-item" as const },
+    { text: "// Exspecta inopinata", type: "info-header" as const },
+  ];
+
   const handleTerminalKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && terminalInput.trim() && !isRedirecting) {
+    if (e.key === "Enter" && terminalInput.trim() && !isRedirecting && !isProcessing) {
+      const cmd = terminalInput.trim().toLowerCase();
       setTerminalHistory((prev) => [...prev, { text: terminalInput }]);
-      if (terminalInput.trim().toLowerCase() === "tallinn") {
-        startRedirectCountdown();
-      }
       setTerminalInput("");
+
+      if (cmd === "warszawa") {
+        startRedirectCountdown();
+      } else if (cmd === "exspecta inopinata") {
+        setIsProcessing(true);
+        setTimeout(() => {
+          setTerminalHistory((prev) => [
+            ...prev,
+            { text: "// Forvent det uventede", type: "system" as const },
+          ]);
+          setIsProcessing(false);
+        }, 1000);
+      } else if (cmd === "prepping") {
+        setIsProcessing(true);
+        setTimeout(() => {
+          setTerminalHistory((prev) => [
+            ...prev,
+            { text: "✓ ADGANG GODKENDT — KLASSIFICERET INFORMATION FØLGER", type: "system" as const },
+            ...preppingList,
+          ]);
+          setIsProcessing(false);
+        }, 1000);
+      } else {
+        setIsProcessing(true);
+        setTimeout(() => {
+          setTerminalHistory((prev) => [
+            ...prev,
+            { text: `✗ UKENDT KOMMANDO: '${cmd}' — ADGANG NÆGTET`, type: "error" as const },
+          ]);
+          setIsProcessing(false);
+        }, 1000);
+      }
     }
   };
 
@@ -121,7 +174,15 @@ export default function Home() {
 
       {/* Main content */}
       <div className="relative z-10 container mx-auto px-4 py-16 text-center">
-        <div className="bg-black border-2 border-green-500 rounded-lg p-12 md:p-16 shadow-[0_0_30px_rgba(0,255,0,0.3)] max-w-6xl mx-auto">
+
+        <div className="relative bg-black border-2 border-green-500 rounded-lg p-12 md:p-16 shadow-[0_0_30px_rgba(0,255,0,0.3)] max-w-6xl mx-auto overflow-hidden">
+          <img
+            src="/spy-sunglasses.png"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none select-none"
+            style={{ mixBlendMode: "screen" }}
+          />
           <div className="flex items-center justify-center gap-2 mb-6">
             <span className="text-green-400">$</span>
             <span className="animate-pulse">_</span>
@@ -133,7 +194,7 @@ export default function Home() {
           {!isMounted ? (
             <div className="flex flex-wrap items-baseline justify-center gap-2 md:gap-4">
               <div className="flex items-baseline">
-                <span className="text-7xl md:text-9xl font-bold text-green-400 tabular-nums">---</span>
+                <span className="text-7xl md:text-9xl font-bold text-green-400 tabular-nums">--</span>
                 <span className="text-green-600 text-xl md:text-2xl ml-2 uppercase">d</span>
               </div>
               <span className="text-green-500 text-5xl md:text-7xl font-bold">:</span>
@@ -160,7 +221,7 @@ export default function Home() {
             <div className="flex flex-wrap items-baseline justify-center gap-2 md:gap-4">
               <div className="flex items-baseline">
                 <span className="text-7xl md:text-9xl font-bold text-green-400 tabular-nums">
-                  {String(timeLeft.days).padStart(3, "0")}
+                  {timeLeft.days}
                 </span>
                 <span className="text-green-600 text-xl md:text-2xl ml-2 uppercase">d</span>
               </div>
@@ -194,45 +255,87 @@ export default function Home() {
         </div>
 
         {/* Terminal */}
-        <div className="mt-8 bg-black border-2 border-green-500 rounded-lg shadow-[0_0_20px_rgba(0,255,0,0.2)] max-w-6xl mx-auto overflow-hidden">
+        <div
+          className="mt-8 bg-black border-2 border-green-500 rounded-lg shadow-[0_0_20px_rgba(0,255,0,0.2)] max-w-6xl mx-auto overflow-hidden cursor-text"
+          onClick={() => terminalInputRef.current?.focus()}
+        >
           <div className="bg-gray-900 border-b border-green-800 px-4 py-2 flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-green-600"></div>
             <div className="w-3 h-3 rounded-full bg-green-800"></div>
             <div className="w-3 h-3 rounded-full bg-green-800"></div>
-            <span className="ml-4 text-green-600 text-xs">
-              {isMounted && timeLeft.isComplete ? "TERMINAL — KLAR" : "TERMINAL — DEAKTIVERET"}
-            </span>
+            <span className="ml-4 text-green-600 text-xs">TERMINAL — KLAR</span>
+            <span className="ml-auto text-green-800 text-xs animate-pulse">↓ TRYK FOR AT SKRIVE</span>
           </div>
-          {isMounted && timeLeft.isComplete ? (
-            <div className="p-4 max-h-60 overflow-y-auto text-left">
-              {terminalHistory.map((line, i) => (
-                <div key={i} className={`flex gap-2 mb-1 ${line.type === "system" ? "text-green-300 animate-pulse" : ""}`}>
-                  {line.type !== "system" && <span className="text-green-600 shrink-0">$</span>}
-                  <span className={line.type === "system" ? "text-green-300" : "text-green-400"}>{line.text}</span>
+          <div className="p-4 h-64 overflow-y-auto text-left">
+            {terminalHistory.map((line, i) => {
+              if (line.type === "system") {
+                return (
+                  <div key={i} className="flex gap-2 mb-1 animate-pulse">
+                    <span className="text-green-300">{line.text}</span>
+                  </div>
+                );
+              }
+              if (line.type === "info-header") {
+                return (
+                  <div key={i} className="mt-2 mb-2">
+                    <span className="text-green-300 font-bold text-base">{line.text}</span>
+                  </div>
+                );
+              }
+              if (line.type === "info") {
+                return (
+                  <div key={i} className="mt-3 mb-1">
+                    <span className="text-green-500 text-sm uppercase tracking-wide">{line.text}</span>
+                  </div>
+                );
+              }
+              if (line.type === "info-item") {
+                return (
+                  <div key={i} className="flex items-start gap-2 mb-2 pl-2">
+                    <span className="text-green-600 shrink-0 mt-0.5">›</span>
+                    <span className="text-green-300 text-sm leading-snug">{line.text}</span>
+                  </div>
+                );
+              }
+              if (line.type === "error") {
+                return (
+                  <div key={i} className="flex gap-2 mb-1">
+                    <span className="text-red-400">{line.text}</span>
+                  </div>
+                );
+              }
+              return (
+                <div key={i} className="flex gap-2 mb-1">
+                  <span className="text-green-600 shrink-0">$</span>
+                  <span className="text-green-400">{line.text}</span>
                 </div>
-              ))}
-              {!isRedirecting && (
-                <div className="flex items-center gap-2">
-                  <span className="text-green-400 shrink-0">$</span>
-                  <input
-                    type="text"
-                    value={terminalInput}
-                    onChange={(e) => setTerminalInput(e.target.value)}
-                    onKeyDown={handleTerminalKeyDown}
-                    className="flex-1 bg-transparent border-none text-green-400 font-mono focus:outline-none focus:ring-0"
-                    spellCheck={false}
-                    autoComplete="off"
-                  />
-                  <span className="text-green-400 animate-pulse">_</span>
-                </div>
-              )}
-              <div ref={terminalEndRef} />
-            </div>
-          ) : (
-            <div className="p-4 text-center text-green-700 text-sm">
-              [DEAKTIVERET INDTIL MISSIONEN STARTER]
-            </div>
-          )}
+              );
+            })}
+            {isProcessing && (
+              <div className="flex gap-2 mb-1 animate-pulse">
+                <span className="text-green-600 shrink-0">$</span>
+                <span className="text-green-500">BEHANDLER...</span>
+              </div>
+            )}
+            {!isRedirecting && !isProcessing && (
+              <div className="flex items-center gap-2 border-t border-green-900 pt-3 mt-2">
+                <span className="text-green-400 shrink-0 font-bold">$</span>
+                <input
+                  ref={terminalInputRef}
+                  type="text"
+                  value={terminalInput}
+                  onChange={(e) => setTerminalInput(e.target.value)}
+                  onKeyDown={handleTerminalKeyDown}
+                  placeholder="indtast kommando..."
+                  className="flex-1 bg-transparent border-none text-green-400 font-mono focus:outline-none focus:ring-0 placeholder-green-900 text-base"
+                  spellCheck={false}
+                  autoComplete="off"
+                />
+                <span className="text-green-400 animate-pulse text-lg">█</span>
+              </div>
+            )}
+            <div ref={terminalEndRef} />
+          </div>
         </div>
       </div>
     </div>

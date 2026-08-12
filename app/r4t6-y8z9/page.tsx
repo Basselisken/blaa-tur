@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import MissionDay from "../components/MissionDay";
 import CompromisedBanner from "../components/CompromisedBanner";
 
-function HiddenPage1Content() {
+function BenniPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -14,26 +14,24 @@ function HiddenPage1Content() {
   useEffect(() => {
     const checkAuthorization = async () => {
       const token = searchParams.get("token");
-      
+
       if (!token) {
         router.push("/cryptic");
         return;
       }
 
       try {
-        // Verify the token matches the expected code
         const response = await fetch("/api/codes");
         const data = await response.json();
 
         if (response.ok) {
           const codes = data.codes;
-          // Check if token matches K7X2-M9P4
           const isValid = codes.some(
             (c: { code1: string; code2: string }) =>
-              c.code1 === "K7X2" && c.code2 === "M9P4"
+              c.code1 === "R4T6" && c.code2 === "Y8Z9"
           );
 
-          if (isValid && token === "k7x2-m9p4") {
+          if (isValid && token === "r4t6-y8z9") {
             setIsAuthorized(true);
           } else {
             router.push("/cryptic");
@@ -41,7 +39,7 @@ function HiddenPage1Content() {
         } else {
           router.push("/cryptic");
         }
-      } catch (error) {
+      } catch {
         router.push("/cryptic");
       } finally {
         setIsChecking(false);
@@ -71,10 +69,10 @@ function HiddenPage1Content() {
       <div className="relative z-10 container mx-auto px-4 py-16">
         <div className="mb-12">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 text-green-400">
-            &gt; KING CARROT
+            &gt; BENNI
           </h1>
           <div className="text-green-500 text-sm mb-2">
-            [KODE: K7X2-M9P4 VERIFICERET]
+            [KODE: R4T6-Y8Z9 VERIFICERET]
           </div>
         </div>
 
@@ -97,7 +95,7 @@ function HiddenPage1Content() {
   );
 }
 
-export default function HiddenPage1() {
+export default function BenniPage() {
   return (
     <Suspense
       fallback={
@@ -108,8 +106,7 @@ export default function HiddenPage1() {
         </div>
       }
     >
-      <HiddenPage1Content />
+      <BenniPageContent />
     </Suspense>
   );
 }
-

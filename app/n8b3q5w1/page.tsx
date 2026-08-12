@@ -2,7 +2,8 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import TerminalChat from "../components/TerminalChat";
+import MissionDay from "../components/MissionDay";
+import CompromisedBanner from "../components/CompromisedBanner";
 
 function HiddenPage2Content() {
   const router = useRouter();
@@ -66,27 +67,31 @@ function HiddenPage2Content() {
 
   return (
     <div className="min-h-screen bg-black text-green-400 font-mono relative overflow-hidden">
+      <CompromisedBanner />
       <div className="relative z-10 container mx-auto px-4 py-16">
         <div className="mb-12">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 text-green-400">
-            &gt; ADGANG TILLADT
+            &gt; BLACK SLUG
           </h1>
           <div className="text-green-500 text-sm mb-2">
             [KODE: B3N8-Q5W1 VERIFICERET]
           </div>
         </div>
 
-        <div className="bg-black border-2 border-green-500 rounded-lg p-8 shadow-[0_0_20px_rgba(0,255,0,0.3)] mb-8">
-          <div className="text-green-400 mb-6 text-lg">
-            {`// VELKOMMEN TIL DENNE SIDE`}
-          </div>
-          <div className="text-green-300 space-y-4">
-            <p>Dette er den anden hemmelige side.</p>
-            <p>Du har succesfuldt indtastet koden: B3N8-Q5W1</p>
-          </div>
-        </div>
+        <div className="mb-4 text-green-600 text-sm">[MISSIONER]</div>
 
-        <TerminalChat chatId="team2" senderName="HOLD-2" />
+        <MissionDay day={1} date="3. september" unlockAt={new Date("2026-09-03T09:00:00+03:00")} forceUnlocked>
+          <div className="text-green-700 text-sm italic">// Missionsbriefing tilføjes her</div>
+        </MissionDay>
+
+        <MissionDay day={2} date="4. september" unlockAt={new Date("2026-09-04T09:00:00+03:00")}>
+          <div className="text-green-700 text-sm italic">// Missionsbriefing tilføjes her</div>
+        </MissionDay>
+
+        <MissionDay day={3} date="5. september" unlockAt={new Date("2026-09-05T09:00:00+03:00")}>
+          <div className="text-green-700 text-sm italic">// Missionsbriefing tilføjes her</div>
+        </MissionDay>
+
       </div>
     </div>
   );
