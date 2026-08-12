@@ -20,30 +20,12 @@ function BenniPageContent() {
         return;
       }
 
-      try {
-        const response = await fetch("/api/codes");
-        const data = await response.json();
-
-        if (response.ok) {
-          const codes = data.codes;
-          const isValid = codes.some(
-            (c: { code1: string; code2: string }) =>
-              c.code1 === "R4T6" && c.code2 === "Y8Z9"
-          );
-
-          if (isValid && token === "r4t6-y8z9") {
-            setIsAuthorized(true);
-          } else {
-            router.push("/cryptic");
-          }
-        } else {
-          router.push("/cryptic");
-        }
-      } catch {
+      if (token === "r4t6-y8z9") {
+        setIsAuthorized(true);
+      } else {
         router.push("/cryptic");
-      } finally {
-        setIsChecking(false);
       }
+      setIsChecking(false);
     };
 
     checkAuthorization();

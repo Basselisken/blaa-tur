@@ -20,32 +20,12 @@ function HiddenPage1Content() {
         return;
       }
 
-      try {
-        // Verify the token matches the expected code
-        const response = await fetch("/api/codes");
-        const data = await response.json();
-
-        if (response.ok) {
-          const codes = data.codes;
-          // Check if token matches K7X2-M9P4
-          const isValid = codes.some(
-            (c: { code1: string; code2: string }) =>
-              c.code1 === "K7X2" && c.code2 === "M9P4"
-          );
-
-          if (isValid && token === "k7x2-m9p4") {
-            setIsAuthorized(true);
-          } else {
-            router.push("/cryptic");
-          }
-        } else {
-          router.push("/cryptic");
-        }
-      } catch (error) {
+      if (token === "k7x2-m9p4") {
+        setIsAuthorized(true);
+      } else {
         router.push("/cryptic");
-      } finally {
-        setIsChecking(false);
       }
+      setIsChecking(false);
     };
 
     checkAuthorization();

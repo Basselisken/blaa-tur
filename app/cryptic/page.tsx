@@ -17,13 +17,6 @@ export default function CrypticPage() {
   const [countdown, setCountdown] = useState<number | null>(null);
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Map codes to their cryptic URLs
-  const codeToUrlMap: { [key: string]: string } = {
-    "K7X2-M9P4": "/x2k7m9p4",
-    "B3N8-Q5W1": "/n8b3q5w1",
-    "R4T6-Y8Z9": "/r4t6-y8z9",
-    "P2L5-J8V3": "/p2l5j8v3",
-  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -51,70 +44,36 @@ export default function CrypticPage() {
     setStatus({ type: null, message: "" });
 
     try {
-      const response = await fetch("/api/codes");
+      const response = await fetch("/api/codes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code1, code2 }),
+      });
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch codes");
-      }
+      if (data.valid) {
+        setIsRedirecting(true);
+        setStatus({ type: "success", message: "✓ KODER VERIFICERET - ADGANG TILLADT" });
+        setCountdown(10);
 
-      const codes = data.codes;
-      const codePair = `${code1}-${code2}`;
-      const matchedCode = codes.find(
-        (c: { code1: string; code2: string }) =>
-          c.code1 === code1 && c.code2 === code2
-      );
-
-      if (matchedCode) {
-        // Find the corresponding URL for this code
-        const targetUrl = codeToUrlMap[codePair];
-        if (targetUrl) {
-          // Start countdown transition
-          setIsRedirecting(true);
-          setStatus({
-            type: "success",
-            message: "✓ KODER VERIFICERET - ADGANG TILLADT",
-          });
-          
-          // Start countdown from 10
-          setCountdown(10);
-          
-          // Countdown timer
-          countdownIntervalRef.current = setInterval(() => {
-            setCountdown((prev) => {
-              if (prev === null || prev <= 1) {
-                if (countdownIntervalRef.current) {
-                  clearInterval(countdownIntervalRef.current);
-                  countdownIntervalRef.current = null;
-                }
-                // Redirect after countdown
-                const token = codePair.toLowerCase();
-                router.push(`${targetUrl}?token=${token}`);
-                return null;
+        countdownIntervalRef.current = setInterval(() => {
+          setCountdown((prev) => {
+            if (prev === null || prev <= 1) {
+              if (countdownIntervalRef.current) {
+                clearInterval(countdownIntervalRef.current);
+                countdownIntervalRef.current = null;
               }
-              return prev - 1;
-            });
-          }, 1000);
-          
-          return;
-        } else {
-          setStatus({
-            type: "success",
-            message: "✓ KODER VERIFICERET - ADGANG TILLADT",
+              router.push(`${data.url}?token=${data.token}`);
+              return null;
+            }
+            return prev - 1;
           });
-        }
+        }, 1000);
       } else {
-        setStatus({
-          type: "error",
-          message: "✗ UGYLDIGE KODER - ADGANG NÆGTET",
-        });
+        setStatus({ type: "error", message: "✗ UGYLDIGE KODER - ADGANG NÆGTET" });
       }
-    } catch (error) {
-      setStatus({
-        type: "error",
-        message: "✗ SYSTEMFEJL - PRØV IGEN",
-      });
-      console.error("Error checking codes:", error);
+    } catch {
+      setStatus({ type: "error", message: "✗ SYSTEMFEJL - PRØV IGEN" });
     } finally {
       setIsChecking(false);
     }
