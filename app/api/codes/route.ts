@@ -1,30 +1,12 @@
-import { readFile } from "fs/promises";
-import { join } from "path";
 import { NextResponse } from "next/server";
 
+const CODES = [
+  { code1: "K7X2", code2: "M9P4" },
+  { code1: "B3N8", code2: "Q5W1" },
+  { code1: "R4T6", code2: "Y8Z9" },
+  { code1: "P2L5", code2: "J8V3" },
+];
+
 export async function GET() {
-  try {
-    const filePath = join(process.cwd(), "codes.md");
-    const fileContents = await readFile(filePath, "utf-8");
-    
-    // Parse codes from the markdown file
-    // Format: 1234-5678 (one per line)
-    const lines = fileContents.split("\n");
-    const codes = lines
-      .map((line) => line.trim())
-      .filter((line) => line && !line.startsWith("#") && line.includes("-"))
-      .map((line) => {
-        const [code1, code2] = line.split("-");
-        return { code1: code1.trim(), code2: code2.trim() };
-      });
-
-    return NextResponse.json({ codes });
-  } catch (error) {
-    console.error("Error reading codes:", error);
-    return NextResponse.json(
-      { error: "Failed to read codes" },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json({ codes: CODES });
 }
-
