@@ -79,15 +79,15 @@ function Agent00PageContent() {
         <div className="mb-4 text-green-600 text-sm">[MISSIONER]</div>
 
         <MissionDay day={1} date="3. september" unlockAt={new Date("2026-09-03T09:00:00+03:00")} forceUnlocked>
-          <div className="text-green-700 text-sm italic">// Missionsbriefing tilføjes her</div>
+          <div className="text-green-700 text-sm italic">{`// Missionsbriefing tilføjes her`}</div>
         </MissionDay>
 
         <MissionDay day={2} date="4. september" unlockAt={new Date("2026-09-04T09:00:00+03:00")}>
-          <div className="text-green-700 text-sm italic">// Missionsbriefing tilføjes her</div>
+          <div className="text-green-700 text-sm italic">{`// Missionsbriefing tilføjes her`}</div>
         </MissionDay>
 
         <MissionDay day={3} date="5. september" unlockAt={new Date("2026-09-05T09:00:00+03:00")}>
-          <div className="text-green-700 text-sm italic">// Missionsbriefing tilføjes her</div>
+          <div className="text-green-700 text-sm italic">{`// Missionsbriefing tilføjes her`}</div>
         </MissionDay>
 
       </div>
