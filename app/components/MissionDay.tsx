@@ -20,7 +20,7 @@ export default function MissionDay({ day, date, unlockAt, forceUnlocked, childre
   }, []);
 
   const isUnlocked = forceUnlocked || (now !== null && now >= unlockAt);
-  const unlockTimeStr = unlockAt.toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Tallinn" });
+  const unlockTimeStr = unlockAt.toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit", timeZone: "Etc/GMT-3" });
 
   return (
     <div className="mb-6">
