@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import MissionDay from "../components/MissionDay";
 import CompromisedBanner from "../components/CompromisedBanner";
+import YouTubeEmbed from "../components/YouTubeEmbed";
 
 function Agent00PageContent() {
   const router = useRouter();
@@ -65,11 +66,11 @@ function Agent00PageContent() {
         </MissionDay>
 
         <MissionDay day={2} date="4. september" unlockAt={new Date("2026-09-04T09:00:00+03:00")}>
-          <div className="text-green-700 text-sm italic">{`// Missionsbriefing tilføjes her`}</div>
+          <YouTubeEmbed videoId="tcwozlg7LC0" title="Agent 00 — Dag 2 Briefing" />
         </MissionDay>
 
         <MissionDay day={3} date="5. september" unlockAt={new Date("2026-09-05T09:00:00+03:00")}>
-          <div className="text-green-700 text-sm italic">{`// Missionsbriefing tilføjes her`}</div>
+          <YouTubeEmbed videoId="EzPA2M6EYEs" title="Agent 00 — Dag 3 Briefing" />
         </MissionDay>
 
       </div>
