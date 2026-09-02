@@ -9,6 +9,25 @@ import MissionSection from "./MissionSection";
 import YouTubeEmbed from "./YouTubeEmbed";
 import Day1Briefing from "./Day1Briefing";
 
+function Dag2Warning() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="mt-6">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full border border-green-800 hover:border-green-500 text-green-600 hover:text-green-400 text-sm font-mono py-3 px-4 rounded-lg transition-colors text-left"
+      >
+        {open ? "▲ Skjul" : "▶ Klik for at se hvilken opførsel du skal undgå"}
+      </button>
+      {open && (
+        <div className="mt-3">
+          <img src="/dag2.gif" alt="Opførsel du skal undgå" className="w-full rounded-lg" />
+        </div>
+      )}
+    </div>
+  );
+}
+
 type TabId = "briefing" | "missions";
 
 interface AgentOpsConsoleProps {
@@ -127,6 +146,7 @@ export default function AgentOpsConsole({ name, code, agentId }: AgentOpsConsole
           </MissionDay>
           <MissionDay day={2} date="4. september" unlockAt={new Date("2026-09-04T09:00:00+03:00")}>
             <YouTubeEmbed videoId="tcwozlg7LC0" title={`${name} — Dag 2 Briefing`} />
+            <Dag2Warning />
           </MissionDay>
           <MissionDay day={3} date="5. september" unlockAt={new Date("2026-09-05T09:00:00+03:00")}>
             <YouTubeEmbed videoId="EzPA2M6EYEs" title={`${name} — Dag 3 Briefing`} />

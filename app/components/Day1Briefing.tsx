@@ -8,7 +8,7 @@ export default function Day1Briefing({ onOpenMissions }: Day1BriefingProps) {
       <div className="text-green-600 text-xs tracking-widest">[TRANSMISSION — DAG 1]</div>
       <p className="text-green-300">God rejse, agent.</p>
       <p className="text-green-400 leading-relaxed">
-        Forvent det uventede. Hold dækningen. Stol kun på denne kanal.
+        Forvent det uventede. Stol kun på denne kanal.
       </p>
       <p className="text-green-400 leading-relaxed">
         Jeres ordrer ligger ikke i denne briefing. Skift til fanen{" "}

@@ -24,54 +24,75 @@ export default function MissionTable({
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-left text-sm border-collapse">
-        <thead>
-          <tr className="text-green-600 text-xs uppercase tracking-widest border-b border-green-900">
-            <th className="py-2 pr-3 whitespace-nowrap">Klar</th>
-            <th className="py-2 pr-3 whitespace-nowrap">Mission</th>
-            <th className="py-2 pr-3">Objektiv</th>
-            <th className="py-2 whitespace-nowrap">Noter</th>
-          </tr>
-        </thead>
-        <tbody>
-          {missions.map((mission) => {
-            const done = !!progress[mission.code];
-            const pending = pendingCodes.has(mission.code);
-            return (
-              <tr
-                key={mission.code}
-                className={`border-b border-green-950 align-top ${
-                  mission.secret ? "bg-green-950/40" : ""
-                } ${done ? "opacity-60" : ""}`}
+    <div className="space-y-3">
+      {missions.map((mission) => {
+        const done = !!progress[mission.code];
+        const pending = pendingCodes.has(mission.code);
+
+        return (
+          <div
+            key={mission.code}
+            className={`border rounded-lg p-4 transition-all ${
+              done
+                ? "border-green-900 opacity-50"
+                : mission.secret
+                ? "border-red-900 bg-red-950/20"
+                : "border-green-800"
+            }`}
+          >
+            <div className="flex items-start gap-4">
+              {/* Checkbox — large tap target */}
+              <button
+                onClick={() => !pending && onToggle(mission.code, !done)}
+                disabled={pending}
+                aria-label={`Marker ${mission.code} som udført`}
+                className={`mt-0.5 shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                  pending
+                    ? "border-green-900 cursor-wait"
+                    : done
+                    ? "border-green-500 bg-green-500 cursor-pointer"
+                    : "border-green-700 cursor-pointer hover:border-green-400"
+                }`}
               >
-                <td className="py-3 pr-3">
-                  <input
-                    type="checkbox"
-                    checked={done}
-                    disabled={pending}
-                    onChange={() => onToggle(mission.code, !done)}
-                    aria-label={`Marker ${mission.code} som udført`}
-                    className="h-4 w-4 accent-green-500 cursor-pointer disabled:cursor-wait"
-                  />
-                </td>
-                <td className="py-3 pr-3 text-green-500 font-bold whitespace-nowrap">
-                  {mission.code}
+                {done && (
+                  <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+                {pending && (
+                  <div className="w-3 h-3 border-2 border-green-700 border-t-transparent rounded-full animate-spin" />
+                )}
+              </button>
+
+              <div className="flex-1 min-w-0">
+                {/* Code + secret badge */}
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-green-400 font-bold text-sm tracking-wide">
+                    {mission.code}
+                  </span>
                   {mission.secret && (
-                    <span className="ml-2 text-[10px] text-red-400 tracking-widest">
+                    <span className="text-[10px] text-red-400 tracking-widest border border-red-900 px-1 rounded">
                       HEMMELIG
                     </span>
                   )}
-                </td>
-                <td className={`py-3 pr-3 text-green-400 ${done ? "line-through" : ""}`}>
+                </div>
+
+                {/* Objective */}
+                <p className={`text-green-300 text-sm leading-snug ${done ? "line-through text-green-800" : ""}`}>
                   {mission.objective}
-                </td>
-                <td className="py-3 text-green-700 text-xs">{mission.notes ?? "—"}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                </p>
+
+                {/* Notes */}
+                {mission.notes && (
+                  <p className="mt-2 text-green-700 text-xs leading-relaxed border-t border-green-950 pt-2">
+                    {mission.notes}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

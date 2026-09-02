@@ -38,7 +38,7 @@ export type Mission = {
 export const sharedMissionsCopy = {
   heading: "[FÆLLES MISSIONER]",
   subtitle: "Kan udføres alle dage vi er væk.",
-  note: "Husk at dokumentation af missionsudførelse er vigtigt. Billeder / video / gør det, hvor andre ser jer udføre missionen.",
+  note: "Husk at dokumentation af missionsudførelse er vigtigt. Billeder / video / gør det, hvor andre ser jer udføre missionen. Tjek missionerne af som de udføres — vi tjekker til sidst, så ingen grund til at prøve at snyde.",
 };
 
 export const sharedMissions: Mission[] = [
@@ -46,6 +46,7 @@ export const sharedMissions: Mission[] = [
     code: "KLEMME",
     title: "Få en klemme",
     objective: "Få en klemme på en anden.",
+    notes: "Klemmen skal sidde på en anden agent i minimum én time før missionen er gennemført.",
   },
   {
     code: "LOKAL",
@@ -53,70 +54,36 @@ export const sharedMissions: Mission[] = [
     objective: "Få et billede med en lokal.",
   },
   {
-    code: "KODEORD",
-    title: "Kodeord",
-    objective: "Få en til at sige et bestemt ord.",
-  },
-  {
     code: "ALIAS",
     title: "Alias",
     objective: "Få en fremmed til at tro, du hedder noget andet.",
   },
   {
-    code: "ØL-REK",
-    title: "Lokal øl",
-    objective: "Køb en lokal øl til smagning.",
-  },
-  {
     code: "REGNING",
-    title: "Estisk regning",
-    objective: "Bed om regningen på estisk.",
+    title: "Lokal regning",
+    objective: "Bed om regningen på det lokale sprog.",
   },
   {
-    code: "ICE",
-    title: "ICE en modstander",
+    code: "ICE-1",
+    title: "ICE en modstander #1",
     objective: "ICE en modstander. Skriv bag på den, hvem den er fra.",
-    notes: "Bonus- eller minuspoint hvis en udpeget person får den.",
+    notes: "Brug udleveret labels — vælg et target og skriv på det udleverede label. Kun points hvis det er det rigtige target der finder icen først. Icen skal stadig drikkes hvis ikke det er den rigtige der finder den, så giver den bare ikke points.",
   },
   {
-    code: "MASTERMIND",
-    title: "Mastermind",
-    objective: "Få en anden agent til at gøre en bestemt ting.",
+    code: "ICE-2",
+    title: "ICE en modstander #2",
+    objective: "ICE en modstander. Skriv bag på den, hvem den er fra.",
+    notes: "Brug udleveret labels — vælg et target og skriv på det udleverede label. Kun points hvis det er det rigtige target der finder icen først. Icen skal stadig drikkes hvis ikke det er den rigtige der finder den, så giver den bare ikke points.",
   },
   {
-    code: "DROP",
-    title: "Taske-drop",
-    objective: "Gem noget i en anden agents taske.",
+    code: "MORGENMAD-FRE",
+    title: "Morgenmad — fredag",
+      objective: "Lav morgenmad — Fredag.",
   },
   {
-    code: "SPISER",
-    title: "Spisefotos",
-    objective: "Få 5 forskellige billeder af en bestemt agent, imens han spiser.",
-  },
-  {
-    code: "DRIKKER",
-    title: "Drikkefotos",
-    objective: "Få 5 forskellige billeder af en bestemt agent, imens han drikker øl, drinks eller vin.",
-  },
-  {
-    code: "MORGENMAD",
-    title: "Morgenmad",
-    objective: "Lav morgenmad.",
-  },
-  {
-    code: "VERDENSMAND",
-    title: "Verdensmand",
-    objective: "Lav Krølles verdensmand-pose på mindst 5 forskellige billeder.",
-  },
-  {
-    code: "SOLBRILLER",
-    title: "Solbriller",
-    objective: "Hav solbriller på, på mindst 5 forskellige billeder.",
-  },
-  {
-    code: "MÆRKE",
-    title: "Føretrøje-mærke",
-    objective: "Skaf et mærke med Estland og/eller Tallinn til føretrøjen.",
+    code: "MORGENMAD-LOR",
+    title: "Morgenmad - Lørdag",
+    objective: "Lav morgenmad — Lørdag.",
   },
 ];
 
@@ -128,10 +95,69 @@ export const personalMissions: Record<AgentId, Mission[]> = {
       objective: "Bed agent Ø om at hjælpe med at nå noget, der står lidt for højt. 5 gange.",
       notes: "Personlig mission. Kan udføres alle dage.",
     },
+    {
+      code: "DRIKKER",
+      title: "Drikkefotos",
+      objective: "Få 5 forskellige billeder af en bestemt agent, imens han drikker øl, drinks eller vin.",
+    },
+    {
+      code: "MÆRKE",
+      title: "Føretrøje-mærke",
+      objective: "Køb dette års mærke til føretrøjen.",
+    },
   ],
-  "black-slug": [],
-  benni: [],
-  "agent-00": [],
+  "black-slug": [
+    {
+      code: "SPISER",
+      title: "Spisefotos",
+      objective: "Få 5 forskellige billeder af en bestemt agent, imens han spiser. Du vælger selv hvilken agent.",
+    },
+    {
+      code: "ROR",
+      title: "Ror på lokalt sprog",
+      objective: "Fortæl en lokal at du ror — på det lokale sprog.",
+    },
+    {
+      code: "HANDJERN",
+      title: "Estiske håndjern",
+      objective: "Når der bliver bestilt en omgang drikkelse — bestil 2 til dig selv. Shots gælder ikke.",
+    },
+  ],
+  benni: [
+    {
+      code: "VERDENSMAND",
+      title: "Verdensmand",
+      objective: "Lav Krølles verdensmand-pose på mindst 5 forskellige billeder.",
+    },
+    {
+      code: "TOILET",
+      title: "Toilet på lokalt sprog",
+      objective: "Spørg efter toilettet på det lokale sprog.",
+    },
+    {
+      code: "GODNAT",
+      title: "Godnat hilsen",
+      objective: "Send en personlig godnat hilsen til hver agent inden du går i seng hver aften.",
+    },
+  ],
+  "agent-00": [
+    {
+      code: "SOLBRILLER",
+      title: "Solbriller",
+      objective: "Hav solbriller på, på mindst 5 forskellige billeder.",
+    },
+    {
+      code: "FUNFACTS",
+      title: "Falske fun-facts",
+      objective: "Kom med minimum 3 falske fun-facts omkring de lokale seværdigheder vi ser.",
+    },
+    {
+      code: "ÆNDER",
+      title: "Gem ænder",
+      objective: "Gem 5 ænder i de andre agenters ejendele — tasker, tøj etc.",
+      notes: "Hvis bare én enkelt and bliver fundet er missionen mislykkedes.",
+    },
+  ],
 };
 
 export function missionTotalFor(agentId: AgentId): number {
