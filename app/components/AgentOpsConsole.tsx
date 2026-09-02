@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import type { AgentId } from "../lib/missions";
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import type { AgentId, AgentProgress } from "../lib/missions";
 import { personalMissions, sharedMissions, sharedMissionsCopy } from "../lib/missions";
 import MissionDay from "./MissionDay";
 import MissionSection from "./MissionSection";
@@ -22,7 +23,69 @@ const tabs: { id: TabId; label: string }[] = [
 ];
 
 export default function AgentOpsConsole({ name, code, agentId }: AgentOpsConsoleProps) {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token") ?? "";
   const [tab, setTab] = useState<TabId>("briefing");
+  const [progress, setProgress] = useState<AgentProgress>({});
+  const [pendingCodes, setPendingCodes] = useState<Set<string>>(new Set());
+  const [progressError, setProgressError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!token) return;
+
+    const load = async () => {
+      try {
+        const response = await fetch(`/api/missions/progress?token=${encodeURIComponent(token)}`);
+        if (!response.ok) throw new Error("load failed");
+        const data = await response.json();
+        setProgress(data.progress ?? {});
+        setProgressError(null);
+      } catch {
+        setProgressError("Kunne ikke hente missionsstatus.");
+      }
+    };
+
+    void load();
+  }, [token]);
+
+  const onToggle = useCallback(
+    async (missionCode: string, done: boolean) => {
+      setPendingCodes((current) => new Set(current).add(missionCode));
+      setProgress((current) => {
+        const next = { ...current };
+        if (done) next[missionCode] = true;
+        else delete next[missionCode];
+        return next;
+      });
+
+      try {
+        const response = await fetch("/api/missions/progress", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token, code: missionCode, done }),
+        });
+        if (!response.ok) throw new Error("save failed");
+        const data = await response.json();
+        setProgress(data.progress ?? {});
+        setProgressError(null);
+      } catch {
+        setProgress((current) => {
+          const next = { ...current };
+          if (done) delete next[missionCode];
+          else next[missionCode] = true;
+          return next;
+        });
+        setProgressError("Kunne ikke gemme. Prøv igen.");
+      } finally {
+        setPendingCodes((current) => {
+          const next = new Set(current);
+          next.delete(missionCode);
+          return next;
+        });
+      }
+    },
+    [token]
+  );
 
   return (
     <>
@@ -73,16 +136,25 @@ export default function AgentOpsConsole({ name, code, agentId }: AgentOpsConsole
 
       {tab === "missions" && (
         <div role="tabpanel">
+          {progressError && (
+            <div className="mb-4 text-red-400 text-xs">{progressError}</div>
+          )}
           <MissionSection
             heading={sharedMissionsCopy.heading}
             subtitle={sharedMissionsCopy.subtitle}
             note={sharedMissionsCopy.note}
             missions={sharedMissions}
+            progress={progress}
+            pendingCodes={pendingCodes}
+            onToggle={onToggle}
           />
           <MissionSection
             heading="[PERSONLIGE MISSIONER]"
             subtitle={`Kun for ${name}. Kan udføres alle dage vi er væk.`}
             missions={personalMissions[agentId]}
+            progress={progress}
+            pendingCodes={pendingCodes}
+            onToggle={onToggle}
           />
         </div>
       )}

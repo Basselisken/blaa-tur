@@ -1,4 +1,31 @@
 export type AgentId = "king-carrot" | "black-slug" | "benni" | "agent-00";
+export type AgentProgress = Record<string, boolean>;
+
+export const AGENT_NAMES: Record<AgentId, string> = {
+  "king-carrot": "KING CARROT",
+  "black-slug": "BLACK SLUG",
+  benni: "BENNI",
+  "agent-00": "AGENT 00",
+};
+
+export const AGENT_IDS = Object.keys(AGENT_NAMES) as AgentId[];
+
+export const AGENT_TOKENS: Record<string, AgentId> = {
+  "k7x2-m9p4": "king-carrot",
+  "b3n8-q5w1": "black-slug",
+  "r4t6-y8z9": "benni",
+  "p2l5-j8v3": "agent-00",
+};
+
+export function agentFromToken(token: string | null | undefined): AgentId | null {
+  if (!token) return null;
+  return AGENT_TOKENS[token] ?? null;
+}
+
+export function isValidMissionCode(agentId: AgentId, code: string): boolean {
+  if (sharedMissions.some((mission) => mission.code === code)) return true;
+  return personalMissions[agentId].some((mission) => mission.code === code);
+}
 
 export type Mission = {
   code: string;
@@ -106,3 +133,14 @@ export const personalMissions: Record<AgentId, Mission[]> = {
   benni: [],
   "agent-00": [],
 };
+
+export function missionTotalFor(agentId: AgentId): number {
+  return sharedMissions.length + personalMissions[agentId].length;
+}
+
+export function completedCountFor(agentId: AgentId, progress: AgentProgress): number {
+  const valid = new Set(
+    [...sharedMissions, ...personalMissions[agentId]].map((mission) => mission.code)
+  );
+  return Object.entries(progress).filter(([code, done]) => done && valid.has(code)).length;
+}

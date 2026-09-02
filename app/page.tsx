@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Scoreboard from "./components/Scoreboard";
 
-// September 3rd - use next occurrence if we've passed it this year
 function getTargetDate() {
   const now = new Date();
   const year = now.getFullYear();
-  const sep3 = new Date(year, 8, 3); // month 8 = September
+  const sep3 = new Date(year, 8, 3);
   return sep3 > now ? sep3 : new Date(year + 1, 8, 3);
 }
 
@@ -189,7 +189,9 @@ export default function Home() {
             <span className="animate-pulse">_</span>
           </div>
           <div className="text-green-500 text-sm mb-8 animate-pulse">
-            [TÆLLER AKTIVERET — MÅL: 03.09.2026]
+            {isMounted && timeLeft.isComplete
+              ? "[SCOREBOARD AKTIVERET — MISSIONER]"
+              : "[TÆLLER AKTIVERET — MÅL: 03.09.2026]"}
           </div>
 
           {!isMounted ? (
@@ -215,9 +217,7 @@ export default function Home() {
               </div>
             </div>
           ) : timeLeft.isComplete ? (
-            <div className="text-green-400 text-5xl md:text-7xl font-bold">
-              &gt; MISSION INITIATED
-            </div>
+            <Scoreboard />
           ) : (
             <div className="flex flex-wrap items-baseline justify-center gap-2 md:gap-4">
               <div className="flex items-baseline">
@@ -251,7 +251,9 @@ export default function Home() {
           )}
 
           <div className="mt-12 text-green-700 text-xs">
-            [STATUS: TÆLLER KØRER — FORBINDELSE: SIKKER]
+            {isMounted && timeLeft.isComplete
+              ? "[STATUS: SCOREBOARD LIVE — FORBINDELSE: SIKKER]"
+              : "[STATUS: TÆLLER KØRER — FORBINDELSE: SIKKER]"}
           </div>
         </div>
 
