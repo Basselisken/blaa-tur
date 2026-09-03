@@ -5,10 +5,7 @@ import { useRouter } from "next/navigation";
 import Scoreboard from "./components/Scoreboard";
 
 function getTargetDate() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const sep3 = new Date(year, 8, 3);
-  return sep3 > now ? sep3 : new Date(year + 1, 8, 3);
+  return new Date("2026-09-03T00:00:00+02:00");
 }
 
 function getTimeLeft() {
