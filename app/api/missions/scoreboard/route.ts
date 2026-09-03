@@ -8,6 +8,7 @@ import {
 import { getAllProgress } from "../../../lib/missionProgressStore";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const all = await getAllProgress();
