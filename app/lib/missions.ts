@@ -10,6 +10,19 @@ export const AGENT_NAMES: Record<AgentId, string> = {
 
 export const AGENT_IDS = Object.keys(AGENT_NAMES) as AgentId[];
 
+/** Display-only scoreboard rows (other people on the trip, not ops-console agents). */
+export type ScoreboardGuest = {
+  agentId: string;
+  name: string;
+  completed: number;
+  total: number;
+};
+
+export const SCOREBOARD_GUESTS: ScoreboardGuest[] = [
+  { agentId: "guest-agent-oe", name: "AGENT Ø", completed: 25, total: 25 },
+  { agentId: "guest-suuuurstromm", name: "AGENT SUUUURSTRØMM", completed: 25, total: 25 },
+];
+
 export const AGENT_TOKENS: Record<string, AgentId> = {
   "k7x2-m9p4": "king-carrot",
   "b3n8-q5w1": "black-slug",
