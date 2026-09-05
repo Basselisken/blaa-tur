@@ -254,6 +254,18 @@ export default function Home() {
           </div>
         </div>
 
+        <div className="mt-8 bg-black border-2 border-green-500 rounded-lg p-8 md:p-10 shadow-[0_0_20px_rgba(0,255,0,0.2)] max-w-6xl mx-auto text-left">
+          <div className="text-green-600 text-xs uppercase tracking-widest mb-4">
+            [NÆSTE ÅRS PLANLÆGGERE]
+          </div>
+          <p className="text-green-300 text-lg md:text-2xl font-bold mb-4">
+            Bonne og hr hest på skjorte
+          </p>
+          <p className="text-green-500 text-sm md:text-base">
+            Vi har meget meget høje forventninger.
+          </p>
+        </div>
+
         {/* Terminal */}
         <div
           className="mt-8 bg-black border-2 border-green-500 rounded-lg shadow-[0_0_20px_rgba(0,255,0,0.2)] max-w-6xl mx-auto overflow-hidden cursor-text"
